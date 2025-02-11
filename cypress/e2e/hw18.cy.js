@@ -1,6 +1,6 @@
 describe('Find Buttons', () => {
     beforeEach(() => {
-        cy.login();
+        cy.auth();
     });
 
     context("Header", () => {
