@@ -24,11 +24,27 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 
-Cypress.Commands.add("login", () => {
+Cypress.Commands.add("auth", () => {
     cy.fixture("cypress.env.json").then((env) => {
       const username = env.username;
       const password = env.password;
   
       cy.visit(`https://${username}:${password}@qauto.forstudy.space`);
     });
+  });
+
+  Cypress.Commands.add("checkEmpty", (inputLocator,message) => {
+    cy.get(inputLocator).focus();
+    cy.get(inputLocator).blur();
+    cy.contains(message).should('be.visible');
+    cy.get(inputLocator).should('have.css', 'border-color', 'rgb(220, 53, 69)')
+    cy.get('.modal-footer > .btn').should('be.disabled');
+  });
+
+  Cypress.Commands.add("checkWrongDataInput", (inputLocator,inputData, message) => {
+    cy.get(inputLocator).type(inputData);
+    cy.get(inputLocator).blur();
+    cy.contains(message).should('be.visible');
+    cy.get(inputLocator).should('have.css', 'border-color', 'rgb(220, 53, 69)')
+    cy.get('.modal-footer > .btn').should('be.disabled');
   });
