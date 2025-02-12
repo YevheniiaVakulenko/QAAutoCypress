@@ -42,9 +42,31 @@ Cypress.Commands.add("auth", () => {
   });
 
   Cypress.Commands.add("checkWrongDataInput", (inputLocator,inputData, message) => {
-    cy.get(inputLocator).type(inputData);
+    //cy.get(inputLocator).type(inputData);
+    cy.get(inputLocator).then(($input) => {
+      if ($input.attr('type') === 'password') {
+          cy.wrap($input).type(inputData, { sensitive: true });
+      } else {
+          cy.wrap($input).type(inputData, { sensitive: false });
+      }
+  });
     cy.get(inputLocator).blur();
     cy.contains(message).should('be.visible');
     cy.get(inputLocator).should('have.css', 'border-color', 'rgb(220, 53, 69)')
     cy.get('.modal-footer > .btn').should('be.disabled');
   });
+
+
+  ///overwrite
+  Cypress.Commands.overwrite('type', (originalFn, element, text, options) => {
+    if (options && options.sensitive) {
+      options.log = false
+      Cypress.log({
+        $el: element,
+        name: 'type',
+        message: '*'.repeat(text.length),
+      })
+    }
+  
+    return originalFn(element, text, options)
+  })
