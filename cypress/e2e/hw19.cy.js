@@ -11,8 +11,8 @@ describe('Registration', () => {
             cy.get('#signupName').type('PaulPaul');
             cy.get('#signupLastName').type('PaulPaul');
             cy.get('#signupEmail').type(email);
-            cy.get('#signupPassword').type('L234567891l');
-            cy.get('#signupRepeatPassword').type('L234567891l');
+            cy.get('#signupPassword').type('L234567891l', { sensitive: true });
+            cy.get('#signupRepeatPassword').type('L234567891l', { sensitive: true });
             cy.get('.modal-footer > .btn').click();
             cy.get('.modal-content').should('not.exist');
         });
