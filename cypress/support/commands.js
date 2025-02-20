@@ -25,13 +25,34 @@
 
 
 Cypress.Commands.add("auth", () => {
-    cy.fixture("cypress.env.json").then((env) => {
-      const username = env.username;
-      const password = env.password;
-  
-      cy.visit(`https://${username}:${password}@qauto.forstudy.space`);
-    });
+  const version = Cypress.env('VERSION');
+  const username = Cypress.env('username');
+  const password = Cypress.env('passwordAuth');
+  let baseUrl;
+  if (version === 'BUG') {
+    baseUrl = Cypress.env('urlBug');
+  } else {
+    baseUrl = Cypress.env('urlNorm');
+  }
+    cy.visit(`https://${username}:${password}@${baseUrl}`)
   });
+
+  Cypress.Commands.add("login", () => {
+    const version = Cypress.env('VERSION');
+    let email,password;
+    if (version === 'BUG') {
+      email = Cypress.env('emailBug');
+      password = Cypress.env('passwordBug');
+    } else {
+      email = Cypress.env('emailNorm');
+      password = Cypress.env('passwordNorm');
+    }
+    cy.get('.header_right > .btn').click();
+    cy.get('#signinEmail').type(email);
+    cy.get('#signinPassword').type(password);
+    cy.contains('Login').click();
+});
+
 
   Cypress.Commands.add("checkEmpty", (inputLocator,message) => {
     cy.get(inputLocator).focus();
