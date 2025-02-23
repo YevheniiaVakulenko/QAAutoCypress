@@ -87,7 +87,7 @@ class FuelPage {
 
     clickCarDropDown(name){
         this.carDropDown.click();
-        this.carDropDownItem.contains(name).click();
+        this.carDropDownItem.contains(name).click({force:true});
     }
 
 }

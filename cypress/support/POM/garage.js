@@ -157,11 +157,20 @@ class GaragePage {
     }
 
     addCarFunc(brand, type, mileage){
+        cy.intercept('POST', '/api/cars').as('addCar');
+
         this.clickAddCarButton();
         this.selectBrand(brand);
         this.selectType(type);
         this.typeMileage(mileage);
         this.clickAddButton();
+        cy.wait('@addCar').then((interception) => {
+            const responseBody = interception.response.body;
+            expect(responseBody.status).to.eq('ok');
+            const carId = responseBody.data.id;
+            expect(carId).to.exist; 
+            cy.writeFile('cypress/fixtures/cypress.env.json', { carId: carId })
+        });
     }
   }
   

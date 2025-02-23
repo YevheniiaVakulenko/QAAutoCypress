@@ -23,6 +23,7 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+import {formatAPIDate} from "../support/utils"; 
 
 Cypress.Commands.add("auth", () => {
   const version = Cypress.env('VERSION');
@@ -63,7 +64,6 @@ Cypress.Commands.add("auth", () => {
   });
 
   Cypress.Commands.add("checkWrongDataInput", (inputLocator,inputData, message) => {
-    //cy.get(inputLocator).type(inputData);
     cy.get(inputLocator).then(($input) => {
       if ($input.attr('type') === 'password') {
           cy.wrap($input).type(inputData, { sensitive: true });
@@ -75,6 +75,31 @@ Cypress.Commands.add("auth", () => {
     cy.contains(message).should('be.visible');
     cy.get(inputLocator).should('have.css', 'border-color', 'rgb(220, 53, 69)')
     cy.get('.modal-footer > .btn').should('be.disabled');
+  });
+
+  Cypress.Commands.add("addExpenseviaApi", () => {
+    const date = new Date();
+    cy.fixture('cypress.env.json').then((data) => {
+      const carId = data.carId;
+      cy.request({
+          method: 'POST',
+          url: '/api/expenses',
+          body: {
+              carId: carId,
+              reportedAt: formatAPIDate(date),
+              mileage: 2,
+              liters: 2,
+              totalCost: 2,
+              forceMileage: false
+          },
+        }).then((response) => {
+          if (response.status !== 200) {
+              throw new Error(`Request failed with status code: ${response.status} and message ${response.body.data.message}`);
+            }
+          expect(response.status).to.equal(200);
+          expect(response.body.data).not.be.empty;
+      });
+    });
   });
 
 

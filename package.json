@@ -10,6 +10,7 @@
     "cypress:runhw17": "npx cypress run --spec cypress/e2e/hw17.cy.js",
     "cypress:runhw18": "npx cypress run --spec cypress/e2e/hw18.cy.js",
     "cypress:runhw20": "npx cypress run --spec cypress/e2e/hw20.cy.js --env VERSION=NORM --reporter mochawesome",
+    "cypress:runhw21": "npx cypress run --spec cypress/e2e/hw21.cy.js --env VERSION=NORM",
     "test:hw20norm": "npx cypress open --env VERSION=NORM",
     "test:hw20bug": "npx cypress open --env VERSION=BUG"
   },
