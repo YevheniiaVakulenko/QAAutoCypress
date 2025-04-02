@@ -15,6 +15,8 @@ describe('Registration', () => {
             cy.get('#signupRepeatPassword').type('L234567891l', { sensitive: true });
             cy.get('.modal-footer > .btn').click();
             cy.get('.modal-content').should('not.exist');
+
+            cy.get('.sidebar > .btn-link').click();
         });
     });
 
