@@ -1,0 +1,20 @@
+name: Cypress Docker Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  cypress-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t qaauto_cypress:1.0 .
+
+      - name: Run Cypress tests in Docker
+        run: docker run --rm -e VERSION=NORM qaauto_cypress:1.0 npx cypress run --browser firefox --spec cypress/e2e/hw19.cy.js
